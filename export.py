@@ -2,7 +2,7 @@ import json
 import redcap
 import time
 #define api main url
-URL = "http://ihabz.stanford.edu/api/"
+URL = "https://redcap.stanford.edu//api/"
 
 ts = time.time()
 #load json file contains configuration.
