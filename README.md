@@ -3,9 +3,9 @@ Python script to export REDCap project data via API using PyCap package
 
 Installation
 ------------
- 
+ Run following command in terminal
 
-    ``$ pip install -r requirements.txt``
+    $ pip install -r requirements.txt
 
 Configuration
 -------------
@@ -19,3 +19,9 @@ define json object for each project you want to export.
       "layout" : "[FOR_DROPDOWN_AND_CHECKBOXES_SPECIFY_RAW_OR_LABEL]"
 }
 ```
+
+Execute
+-------
+Run following command in terminal
+
+    $ python export.py
