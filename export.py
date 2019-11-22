@@ -15,6 +15,7 @@ class Export:
         with open('config.json') as json_file:
             data = json.load(json_file)
 
+        # define default section
         default_url = data['defaults']['api_url']
         default_path = data['defaults']['output_path']
         default_raw_or_label = data['defaults']['raw_or_label']
