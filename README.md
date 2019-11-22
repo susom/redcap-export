@@ -14,9 +14,25 @@ define json object for each project you want to export.
 
 ```
 {
-      "token" : "[API_PROJECT_TOKEN]",
-      "path" : "[PATH_WHERE_TO_SAVE_FILE]",
-      "layout" : "[FOR_DROPDOWN_AND_CHECKBOXES_SPECIFY_RAW_OR_LABEL]"
+  "defaults": {
+    "api_url": "[DEFAULT_API_URL]",
+    "output_path": "[DEFAULT_OUT_PATH]",
+    "raw_or_label": "[RAW_OR_LABEL]"
+  },
+  "projects": [
+    {
+      "token" : "[PROJECT_API_TOKEN]",
+      "api_url": "[SPECIFY_URL_IF_DIFFERENT_THAN_DEFAULT_ONE]",
+      "file_prefix" : "[FILE_PREFIX]",
+      "raw_or_label" : "[DEFINE_THIS_IF_DIFFERENT_THAN_DEFAULT_RAW_OR_LABLE]",
+      "events" : [
+        "[ARRAY_OF_UNIQUE_REDCAP_EVENTS_NAMES]"
+      ],
+      "fields": [
+        "[ARRAY_OF_UNIQUE_FIELDS_NAMES]"
+      ]
+    }
+  ]
 }
 ```
 
