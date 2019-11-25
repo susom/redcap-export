@@ -1,5 +1,5 @@
 # redcap-export
-Python script to export REDCap project data via API using PyCap package - testffff
+Python script to export REDCap project data via API using PyCap package  
 
 Installation
 ------------
