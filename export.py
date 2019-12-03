@@ -1,4 +1,4 @@
-import json, yaml
+import yaml
 import redcap
 from redcap import RedcapError
 
