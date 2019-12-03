@@ -10,7 +10,7 @@ import warnings
 
 from .request import RCRequest, RedcapError, RequestException
 import semantic_version
-
+from requests.exceptions import ConnectionError
 try:
     from StringIO import StringIO
 except ImportError:
@@ -55,8 +55,8 @@ class Project(object):
     def configure(self):
         try:
             self.metadata = self.__md()
-        except RequestException:
-            raise RedcapError("Exporting metadata failed. Check your URL and token.")
+        except ConnectionError as e:
+            print(e)
         try:
             self.redcap_version = self.__rcv()
         except:
