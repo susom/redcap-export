@@ -1,7 +1,7 @@
 import yaml
 import redcap
 from redcap import RedcapError
-
+import datetime
 
 # Test comment for JIRA Cloud
 
@@ -132,7 +132,6 @@ class Export:
             else:
                 self.args['event_name'] = ""
 
-            print(self.args)
             # initiate REDCap api object
             project = redcap.Project(self.args['url'], self.args['token'])
             self.__write_to_file(self.__export(project))
@@ -140,13 +139,16 @@ class Export:
     def __write_to_file(self, all_data):
         # open file handler
 
-        print(self.outpu_path + self.args['file_prefix'] + '.' + self.args['format'])
-        print(all_data)
         with open(self.outpu_path + self.args['file_prefix'] + '.' + self.args['format'], 'w') as writeFile:
             writeFile.write(all_data)
         writeFile.close()
+        self.__update_logfile()
         print("export completed successfully")
 
+    def __update_logfile(self):
+        with open(self.outpu_path + "last_successful_update.log", 'w') as writeFile:
+            writeFile.write(str(datetime.datetime.now()))
+        writeFile.close()
 
     def __getvalues(self, dlist):
         result = []
