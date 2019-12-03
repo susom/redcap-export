@@ -12,7 +12,7 @@ Configuration
 
 define json object for each project you want to export. 
 
-```
+```json
 {
   "defaults": {
     "api_url": "[DEFAULT_API_URL]",
@@ -24,7 +24,7 @@ define json object for each project you want to export.
       "token" : "[PROJECT_API_TOKEN]",
       "api_url": "[SPECIFY_URL_IF_DIFFERENT_THAN_DEFAULT_ONE]",
       "file_prefix" : "[FILE_PREFIX]",
-      "raw_or_label" : "[DEFINE_THIS_IF_DIFFERENT_THAN_DEFAULT_RAW_OR_LABLE]",
+      "raw_or_label" : "[DEFINE_THIS_IF_DIFFERENT_THAN_DEFAULT_RAW_OR_LABEL]",
       "events" : [
         "[ARRAY_OF_UNIQUE_REDCAP_EVENTS_NAMES]"
       ],
