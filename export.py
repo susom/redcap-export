@@ -64,14 +64,14 @@ class Export:
                     p['raw_or_label'] == 'raw' or p['raw_or_label'] == 'label'):
                 self.args['raw_or_label'] = p['raw_or_label'].lower()
             else:
-                self.args['raw_or_label'] = self.raw_or_label
+                self.args['raw_or_label'] = self.raw_or_label.lower()
 
             # check if format is defined otherwise user default one
             if "format" in p and p['format'] != '' and (
                     p['format'] == 'raw' or p['format'] == 'label' or p['format'] == 'both'):
-                self.args['format'] = p['format']
+                self.args['format'] = p['format'].lower()
             else:
-                self.args['format'] = self.format
+                self.args['format'] = self.format.lower()
 
             # check if format is defined otherwise user default one
             if "export_survey_fields" in p and p['export_survey_fields'] != '' and (
