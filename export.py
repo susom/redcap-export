@@ -3,19 +3,32 @@ import redcap
 from redcap import RedcapError
 import datetime
 
-# Test comment for JIRA Cloud
 
-# initiate the class
 class Export:
+    # API url could be default or specified per project.
     url = ""
+
+    # output path to where to save exported data
     outpu_path = ""
+
+    # checkboxes and dropboxes represented as values, labels or both
     raw_or_label = ""
+
+    # type out output from redcap and file type. (json,csv, xml, df)
     format = ""
+
+    # output file name could be default or specified per project.
     file_prefix = ""
+
+    # array of defined projects in config.yaml
     projects = []
+
+    # data dict to be used in redcap export function.
     args = {}
 
+    # initiate the class
     def __init__(self):
+        # read config.yaml
         with open("config.yaml", 'r') as stream:
             try:
                 data = yaml.safe_load(stream)
@@ -32,7 +45,7 @@ class Export:
 
     def process(self):
 
-        # loop over the configuration.
+        # loop over the projects array.
         for p in self.projects:
             # get the token
             try:
@@ -136,6 +149,7 @@ class Export:
             project = redcap.Project(self.args['url'], self.args['token'])
             self.__write_to_file(self.__export(project))
 
+    # write exported data to specified file
     def __write_to_file(self, all_data):
         # open file handler
 
@@ -145,17 +159,21 @@ class Export:
         self.__update_logfile()
         print("export completed successfully")
 
+    # once everything is done log time to mark this as last successful update.
     def __update_logfile(self):
         with open(self.outpu_path + "last_successful_update.log", 'w') as writeFile:
             writeFile.write(str(datetime.datetime.now()))
         writeFile.close()
 
-    def __getvalues(self, dlist):
+    # get data dictionary values because they are represented in array in yaml file
+    @staticmethod
+    def __getvalues(dlist):
         result = []
         for l in dlist:
             result.append(l['name'])
         return result
 
+    # connect to REDCap API and export data based in yaml configuration for specified token
     def __export(self, project):
         # export all records as csv string format
         try:
@@ -176,5 +194,8 @@ class Export:
         return all_data
 
 
+# init the object
 export = Export()
+
+# process config.yaml
 export.process()
