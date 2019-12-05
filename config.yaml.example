@@ -3,17 +3,18 @@ defaults:
   url: "[HOST_NAME]/api/"             # e.g. https://redcap.stanford.edu/api/
   output_path: "exports/"             # Enter a path where the export csv files should go
   raw_or_label: "raw"                 # Valid values are 'raw', 'label', 'both'
-  file_prefix: "[DEFAULT_FILE_NAME]"
   format: "csv"                       # Valid options are 'json', 'csv', or 'xml'
 
-# Define one or more projects for API access below
-# Indent one time for the token parameter and then 2 or more times for optional parameters
+# Define one or more projects for API export below
 projects:
-  # First Project
-  - token: "[PROJECT_TOKEN]"
-    # Optional Parameters (you can override any of the default values above for this project)
-    #url: "[FILL_THIS_IF_DIFFERENT_FROM_DEFAULT_URL]"
-    #file_prefix: "proj_a_"
+  - token: "[PROJECT_TOKEN]"          # Enter your REDCap API Token
+    file_prefix: "proj_a"             # Enter a valid prefix for the output files
+  - token: "[SECOND_TOKEN]"
+    file_prefix: "proj_b"
+
+
+    # Optional Parameters (you can skip any of theseoverride any of the default values above for this project)
+    url: "[FILL_THIS_IF_DIFFERENT_FROM_DEFAULT_URL]"
     #    Export Optional Parameters
     #    ----------
     #    records: list
