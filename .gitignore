@@ -1,2 +1,5 @@
 /.idea/
 config.json
+config.yaml
+!exports/.keep
+exports/*
