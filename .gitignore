@@ -3,3 +3,10 @@ config.json
 config.yaml
 !exports/.keep
 exports/*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Virtual Environment Subdirs
+venv/
