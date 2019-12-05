@@ -1,4 +1,5 @@
 import yaml
+import json
 import redcap
 from redcap import RedcapError
 import datetime
@@ -9,7 +10,7 @@ class Export:
     url = ""
 
     # output path to where to save exported data
-    outpu_path = ""
+    output_path = ""
 
     # checkboxes and dropboxes represented as values, labels or both
     raw_or_label = ""
@@ -35,10 +36,10 @@ class Export:
 
                 # define default section
                 self.url = data['defaults']['url']
-                self.outpu_path = data['defaults']['output_path']
+                self.output_path = data['defaults']['output_path']
                 self.raw_or_label = data['defaults']['raw_or_label']
                 self.format = data['defaults']['format']
-                self.file_prefix = data['defaults']['file_prefix']
+#                 self.file_prefix = data['defaults']['file_prefix']
                 self.projects = data['projects']
             except yaml.YAMLError as exc:
                 print(exc)
@@ -47,11 +48,18 @@ class Export:
 
         # loop over the projects array.
         for p in self.projects:
+
             # get the token
             try:
                 self.args['token'] = p['token']
             except None:
                 print("Token must be provided")
+
+            # get the output filename
+            try:
+                self.args['file_prefix'] = p['file_prefix']
+            except KeyError:
+                print("file_prefix must be provided")
 
             # get api url if existed
             if "url" in p and p['url'] != '':
@@ -66,14 +74,14 @@ class Export:
             else:
                 self.args['raw_or_label'] = self.raw_or_label.lower()
 
-            # check if format is defined otherwise user default one
+            # check if format is defined otherwise use default one
             if "format" in p and p['format'] != '' and (
                     p['format'] == 'raw' or p['format'] == 'label' or p['format'] == 'both'):
                 self.args['format'] = p['format'].lower()
             else:
                 self.args['format'] = self.format.lower()
 
-            # check if format is defined otherwise user default one
+            # check if format is defined otherwise use default one
             if "export_survey_fields" in p and p['export_survey_fields'] != '' and (
                     p['export_survey_fields'] == 'True' or p['export_survey_fields'] == 'False'):
                 self.args['export_survey_fields'] = p['export_survey_fields']
@@ -100,12 +108,11 @@ class Export:
             else:
                 self.args['filter_logic'] = ""
 
-            # exported file name prefix.
-            # get api url if existed
-            if "file_prefix" in p and p['file_prefix'] != '':
-                self.args['file_prefix'] = p['file_prefix']
-            else:
-                self.args['file_prefix'] = self.file_prefix
+#             # exported file name prefix.
+#             if "file_prefix" in p and p['file_prefix'] != '':
+#                 self.args['file_prefix'] = p['file_prefix']
+#             else:
+#                 self.args['file_prefix'] = self.file_prefix
 
                 # specify fields if defined
             if "fields" in p:
@@ -152,16 +159,18 @@ class Export:
     # write exported data to specified file
     def __write_to_file(self, all_data):
         # open file handler
+        if self.format == "json":
+            all_data = json.dumps(all_data)
 
-        with open(self.outpu_path + self.args['file_prefix'] + '.' + self.args['format'], 'w') as writeFile:
-            writeFile.write(all_data)
+        with open(self.output_path + self.args['file_prefix'] + '.' + self.args['format'], 'w') as writeFile:
+            writeFile.write(str(all_data))
         writeFile.close()
         self.__update_logfile()
-        print("export completed successfully")
+        print(self.output_path + self.args['file_prefix'] +  '.' + self.args['format'] + " successfully exported")
 
-    # once everything is done log time to mark this as last successful update.
+    # once everything is done log time to mark this as last successful export.
     def __update_logfile(self):
-        with open(self.outpu_path + "last_successful_update.log", 'w') as writeFile:
+        with open(self.output_path + "last_successful_export.log", 'w') as writeFile:
             writeFile.write(str(datetime.datetime.now()))
         writeFile.close()
 
