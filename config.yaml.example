@@ -1,4 +1,4 @@
-# BELOW IS A BASIC EXAMPLE - COPY AND MODIFY AS NEEDED:
+# BELOW IS A MORE COMPLEX EXAMPLE
 
 # Defaults apply to as the 'starting' values for all projects being exported
 defaults:
@@ -9,7 +9,34 @@ defaults:
 
 # Define one or more projects for API export below
 projects:
-  - token: "[PROJECT_TOKEN]"          # Enter your REDCap API Token
-    file_prefix: "proj_a"             # Enter a valid prefix for the output files (proj_a.csv will be result)
+  - token: "[PROJECT_TOKEN]"                # (Required)Enter your REDCap API Token
+    file_prefix: "proj_a"                   # (Required)Enter a valid prefix for the output files
+    url: "https://other_redcap_url/api/"    # (Optional)This project comes from a non-default server
+    filter_logic: "[eligible] = '1'"        # (Optional)Only take eligible records
+    records:                                # (Optional)array of record ids to be included in the report
+        - name: "RECORD_ID_1"               # (Optional)the array key must be name
+        - name: "RECORD_ID_2"               # (Optional)the array key must be name
+    fields:                                 # (Optional)array of fields to be included in the report
+        - name: "field_1"                   # (Optional)the array key must be name
+        - name: "field_2"                   # (Optional)the array key must be name
+    forms:                                  # (Optional)array of instrument name
+        - name: "form_1"                    # (Optional)the array key must be name
+        - name: "form_2"                    # (Optional)the array key must be name
+    events:                                 # (Optional)array of events name
+        - name: "event_1"                   # (Optional)the array key must be name
+        - name: "event_2"                   # (Optional)the array key must be name
+    raw_or_label: "raw or label or both"    # (Optional)how dropdown and checkboxes to be displayed can be raw, label or the word
+    # "both"
+    event_name: "unique_event_name"         # (Optional)another way to specifying required event
+    format: "json_csv_xml_df"               # (Optional) Specify format if different that default. Valid options are
+    'json', 'csv', or 'xml'
+    export_survey_fields: "True_False"      # (Optional)specify to export survey identifier. Valid options are True,
+    False
+    export_data_access_groups: "True_False" # (Optional)specify to the export Data Access Groups. Valid options are True,
+    False
+    export_checkbox_labels: "True_False"    # (Optional)specify whether to export checkbox values as their label on
+    #      export. Valid options are True, False
+    df_kwargs: dict                         # (Optional)Passed to ``pandas.read_csv`` to control construction of
+    #      returned DataFrame.
   - token: "[SECOND_TOKEN]"
     file_prefix: "proj_b"
