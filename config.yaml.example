@@ -6,13 +6,13 @@ defaults:
   output_path: "exports/"             # Enter a path where the export csv files should go
   raw_or_label: "raw"                 # Valid values are 'raw', 'label', 'both'
   format: "csv"                       # Valid options are 'json', 'csv', or 'xml'
-  download: "0"                       # option to download the generated file by default is No
+  download: "0"                       # option to download the generated file by default is No. file will be user download folder
 
 # Define one or more projects for API export below
 projects:
   - token: "[PROJECT_TOKEN]"                # (Required)Enter your REDCap API Token
     file_prefix: "proj_a"                   # (Required)Enter a valid prefix for the output files
-    download: "1"                           # (Optional)Specify within to download generated file or not.
+    download: "1"                           # (Optional)Specify within to download generated file or not. file will be user download folder
     url: "https://other_redcap_url/api/"    # (Optional)This project comes from a non-default server
     filter_logic: "[eligible] = '1'"        # (Optional)Only take eligible records
     records:                                # (Optional)array of record ids to be included in the report
