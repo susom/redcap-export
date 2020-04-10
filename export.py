@@ -3,7 +3,8 @@ import json
 import redcap
 from redcap import RedcapError
 import datetime
-
+import os
+from pathlib import Path
 
 class Export:
     # API url could be default or specified per project.
@@ -17,6 +18,9 @@ class Export:
 
     # type out output from redcap and file type. (json,csv, xml, df)
     format = ""
+
+    # specify within to download generated file to user machine.
+    download = ""
 
     # output file name could be default or specified per project.
     file_prefix = ""
@@ -39,6 +43,7 @@ class Export:
                 self.output_path = data['defaults']['output_path']
                 self.raw_or_label = data['defaults']['raw_or_label']
                 self.format = data['defaults']['format']
+                self.download = int(data['defaults']['download'])
 #                 self.file_prefix = data['defaults']['file_prefix']
                 self.projects = data['projects']
             except yaml.YAMLError as exc:
@@ -80,6 +85,14 @@ class Export:
                 self.args['format'] = p['format'].lower()
             else:
                 self.args['format'] = self.format.lower()
+
+
+            # check to we should download the generated file
+            if "download" in p and p['download'] != '' and (
+                    p['download'] == '1' or p['download'] == '1'):
+                self.args['download'] = int(p['download'])
+            else:
+                self.args['download'] = int(self.download.lower())
 
             # check if format is defined otherwise use default one
             if "export_survey_fields" in p and p['export_survey_fields'] != '' and (
@@ -161,18 +174,42 @@ class Export:
         # open file handler
         if self.format == "json":
             all_data = json.dumps(all_data)
-
-        with open(self.output_path + self.args['file_prefix'] + '.' + self.args['format'], 'w') as writeFile:
+        name = self.args['file_prefix'] + '.' + self.args['format']
+        with open(self.output_path + name, 'w') as writeFile:
             writeFile.write(str(all_data))
+
+        # check if user wants to download the file
+        if(self.args['download'] == 1):
+            path = self.__get_download_path() + name
+            with open(path, 'w') as writeFile:
+                writeFile.write(str(all_data))
         writeFile.close()
         self.__update_logfile()
         print(self.output_path + self.args['file_prefix'] +  '.' + self.args['format'] + " successfully exported")
 
+        if (self.args['download'] == 1):
+            print(self.__get_download_path() + self.args['file_prefix'] + '.' + self.args['format'] + " successfully downloaded")
     # once everything is done log time to mark this as last successful export.
     def __update_logfile(self):
         with open(self.output_path + "last_successful_export.log", 'w') as writeFile:
             writeFile.write(str(datetime.datetime.now()))
+            if (self.args['download'] == 1):
+                writeFile.write("File also downloaded at " + self.__get_download_path())
         writeFile.close()
+
+    # get download path.
+    def __get_download_path(self):
+        if os.name == 'nt':
+            if os.name == 'nt':
+                import winreg
+                sub_key = r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders'
+                downloads_guid = '{374DE290-123F-4565-9164-39C4925E467B}'
+                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, sub_key) as key:
+                    location = winreg.QueryValueEx(key, downloads_guid)[0]
+                return location
+        else:
+            return str(os.path.join(Path.home(), "Downloads")) + "/"
+
 
     # get data dictionary values because they are represented in array in yaml file
     @staticmethod
